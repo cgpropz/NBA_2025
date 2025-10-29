@@ -2,6 +2,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import csv
 import os
+import requests
 
 # Authenticate with Google Sheets API (JSON from secret)
 def authenticate_google_sheets(service_account_json):
