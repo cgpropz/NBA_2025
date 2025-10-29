@@ -20,7 +20,7 @@ jobs:
       - name: Install deps  # Pip the requirements
         run: |
           python -m pip install --upgrade pip
-          pip install selenium pandas gspread oauth2client lxml requests gspread_dataframe sys
+          pip install selenium pandas gspread oauth2client lxml requests gspread_dataframe 
 
       - name: Run odds update  # Execute the magic
         env:  # Pass secrets as env vars
