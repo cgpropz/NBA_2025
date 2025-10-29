@@ -6,13 +6,18 @@ print(f"Using Python executable: {sys.executable}")
 print(f"Python version: {sys.version}")
 
 def dfs_scraper():
-    # Fetch data from PrizePicks API
-    url = "https://partner-api.prizepicks.com/projections?per_page=1000"
-    response = requests.get(url)
+    # Fetch data from PrizePicks API (NBA: league_id=7)
+    url = "https://api.prizepicks.com/projections?league_id=7&per_page=1000"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    response = requests.get(url, headers=headers)
+    print(f"API Status: {response.status_code}")  # Diagnostic: 200=win
     if response.status_code != 200:
-        print(f"API hiccup: {response.status_code}")
+        print(f"API hiccup: {response.text[:200]}")  # Error peek
         return []
     prizepicks = response.json()
+    print(f"Fetched {len(prizepicks.get('data', []))} projections")  # Count check
     
     # Initialize lists/dicts to store data
     plist = []  # Projections list
@@ -30,7 +35,7 @@ def dfs_scraper():
     # Parse projections from data
     for proj in prizepicks.get('data', []):
         attrs = proj['attributes']
-        stat_type = attrs.get('statType', 'N/A')  # e.g., 'points'
+        stat_type = attrs.get('statType', attrs.get('stat_type', 'N/A'))  # Flex key
         line = attrs.get('line', 'N/A')  # Prop line
         
         # Link to player via relationship
@@ -58,4 +63,4 @@ if __name__ == "__main__":
         df.to_csv('NBA_odds_2025.csv', index=False)
         print(f"Data Saved... {len(df)} NBA props forged! 🏀")
     else:
-        print("No data—API dry?")
+        print("No data—API dry? Check logs above.")
