@@ -3,6 +3,8 @@ from google.oauth2.service_account import Credentials
 import csv
 import os
 import requests
+import pd as pandas
+
 
 # Authenticate with Google Sheets API (JSON from secret)
 def authenticate_google_sheets(service_account_json):
